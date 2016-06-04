@@ -8,7 +8,9 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  # config.secret_key = 'ea7ec2f0fcf1b3d1d7935fe2f1903d75da6281e75fd13431f8b43dc56b9479bc273e8ecbc9c268931382982d15d346d4e14e96d747f45b03d7e2245dfc277a83'
+  # Devise will use the `secret_key_base` on Rails 4+ applications as its `secret_key`
+  # by default. You can change it below and use your own secret key.
+  config.secret_key = '3383a47aa70a70be4c0e8893a8091ab4efc38c45f6f1f23464fb7aad3e47f4ee969758e4eb5371e75fd86af6adbaab259e8349f89d70d5e439fce0c385da05fc'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -23,7 +25,7 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  require 'devise/orm/mongoid'
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
@@ -33,7 +35,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  # config.authentication_keys = [ :email ]
+  # config.authentication_keys = [:email]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -45,12 +47,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email ]
+  config.case_insensitive_keys = [:email]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email ]
+  config.strip_whitespace_keys = [:email]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -101,7 +103,10 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = 'cc8b25b702146d2290100865f0c80ae6d0f01531099a7b7c19a07825e183b9391991b5c8e0ad7f6d90033a86fb6d015ca39df77eaf50067a2cdd1cec048df569'
+  # config.pepper = '9a9ee7ffa50ac6aa1e9df2e68f54b57508ecd31da6a5f1dd894de5b82759e145f3020e5d9a73cfc97d3eb177d25c26a7f9db7bcc2ae68cd5edc0d2d50e4ada26'
+
+  # Send a notification email when the user's password is changed
+  # config.send_password_change_notification = false
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
@@ -126,7 +131,7 @@ Devise.setup do |config|
   config.reconfirmable = true
 
   # Defines which key will be used when confirming an account
-  # config.confirmation_keys = [ :email ]
+  # config.confirmation_keys = [:email]
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
@@ -144,7 +149,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :validatable
   # Range for password length.
-  config.password_length = 8..128
+  config.password_length = 8..72
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
@@ -156,9 +161,6 @@ Devise.setup do |config|
   # time the user will be asked for credentials again. Default is 30 minutes.
   # config.timeout_in = 30.minutes
 
-  # If true, expires auth token on session timeout.
-  # config.expire_auth_token_on_timeout = false
-
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
   # :failed_attempts = Locks an account after a number of failed attempts to sign in.
@@ -166,7 +168,7 @@ Devise.setup do |config|
   # config.lock_strategy = :failed_attempts
 
   # Defines which key will be used when locking and unlocking an account
-  # config.unlock_keys = [ :email ]
+  # config.unlock_keys = [:email]
 
   # Defines which strategy will be used to unlock an account.
   # :email = Sends an unlock link to the user email
@@ -188,12 +190,16 @@ Devise.setup do |config|
   # ==> Configuration for :recoverable
   #
   # Defines which key will be used when recovering the password for an account
-  # config.reset_password_keys = [ :email ]
+  # config.reset_password_keys = [:email]
 
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
   config.reset_password_within = 6.hours
+
+  # When set to false, does not sign a user in automatically after their password is
+  # reset. Defaults to true, so a user is signed in automatically after a reset.
+  # config.sign_in_after_reset_password = true
 
   # ==> Configuration for :encryptable
   # Allow you to use another encryption algorithm besides bcrypt (default). You can use
@@ -228,7 +234,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  config.navigational_formats = ['*/*', :'*/*', :html, :json]
+  # config.navigational_formats = ['*/*', :html]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
@@ -237,29 +243,6 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :facebook, ENV['FACEBOOK_SIGN_IN_APP_ID'], ENV['FACEBOOK_SIGN_IN_APP_SECRET']
-  config.omniauth :twitter, ENV['TWITTER_SIGN_IN_APP_ID'], ENV['TWITTER_SIGN_IN_APP_SECRET']
-      {
-          :secure_image_url => 'true',
-          :image_size => 'original',
-          :authorize_params => {
-            :force_login => 'true',
-            :lang => 'pt'
-          }
-      }
-  config.omniauth :linkedin, ENV['LINKED_IN_SIGN_IN_CONSUMER_KEY'], ENV['LINKED_IN_SIGN_IN_CONSUMER_SECRET']
-
-  config.omniauth :google_oauth2, ENV['GMAIL_SIGN_IN_APP_ID'], ENV['GMAIL_SIGN_IN_APP_SECRET']
-     {
-         :provider_ignores_state => true,
-         :redirect_uri => 'http://localhost:3000/users/auth/google_oauth2/callback', #change this redirect url
-         :name => 'google',
-         :scope => 'email, profile, plus.me, http://gdata.youtube.com',
-         :prompt => 'select_account',
-         :image_aspect_ratio => 'square',
-         :image_size => 50
-     }
-  #config.omniauth :twitter, TWITTER_SIGN_IN_API_KEY, TWITTER_SIGN_IN_API_SECRET
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -280,7 +263,31 @@ Devise.setup do |config|
   # The router that invoked `devise_for`, in the example above, would be:
   # config.router_name = :my_engine
   #
-  # When using omniauth, Devise cannot automatically set Omniauth path,
+  # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  config.omniauth :facebook, ENV['FACEBOOK_SIGN_IN_APP_ID'], ENV['FACEBOOK_SIGN_IN_APP_SECRET']
+  config.omniauth :twitter, ENV['TWITTER_SIGN_IN_APP_ID'], ENV['TWITTER_SIGN_IN_APP_SECRET']
+  {
+      :secure_image_url => 'true',
+      :image_size => 'original',
+      :authorize_params => {
+          :force_login => 'true',
+          :lang => 'pt'
+      }
+  }
+  config.omniauth :linkedin, ENV['LINKED_IN_SIGN_IN_CONSUMER_KEY'], ENV['LINKED_IN_SIGN_IN_CONSUMER_SECRET']
+
+  config.omniauth :google_oauth2, ENV['GMAIL_SIGN_IN_APP_ID'], ENV['GMAIL_SIGN_IN_APP_SECRET']
+  {
+      :provider_ignores_state => true,
+      :redirect_uri => 'http://localhost:3000/users/auth/google_oauth2/callback', #change this redirect url
+      :name => 'google',
+      :scope => 'email, profile, plus.me, http://gdata.youtube.com',
+      :prompt => 'select_account',
+      :image_aspect_ratio => 'square',
+      :image_size => 50
+  }
+
 end

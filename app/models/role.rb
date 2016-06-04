@@ -1,9 +1,20 @@
-class Role < ActiveRecord::Base
-  has_and_belongs_to_many :users, :join_table => :roles_users
+class Role
+  include Mongoid::Document
+  has_and_belongs_to_many :users
+  belongs_to :resource, :polymorphic => true
 
-  # Role ID for authorization
-  USER_ROLE   = {
-      super_admin: 1,
-      member: 2,
-  }
+  field :name, :type => String
+
+  index({
+    :name => 1,
+    :resource_type => 1,
+    :resource_id => 1
+  },
+  { :unique => true})
+
+  validates :resource_type,
+            :inclusion => { :in => Rolify.resource_types },
+            :allow_nil => true
+
+  scopify
 end

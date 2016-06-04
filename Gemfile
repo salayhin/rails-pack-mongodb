@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.2', '>= 4.2.6'
 # Use postgresql as the database for Active Record
 #gem 'pg'
-gem 'mysql2', '~> 0.3.18'
+#gem 'mysql2', '~> 0.3.18'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -57,3 +57,6 @@ gem 'omniauth-linkedin', '~> 0.2.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 gem 'carrierwave', '~> 0.10.0'
 gem 'mini_magick', '~> 4.2.10'
+gem 'mongoid', github: 'mongoid/mongoid'
+gem 'bson_ext'
+gem 'rolify'
